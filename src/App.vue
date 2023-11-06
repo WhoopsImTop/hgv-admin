@@ -1,9 +1,31 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { watch, ref, onBeforeMount } from "vue";
+import { RouterLink, RouterView, useRoute } from "vue-router";
+import Login from "./views/Auth/Login.vue";
+
+const authState = ref(false);
+
+const checkAuthState = () => {
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    authState.value = false;
+  } else {
+    authState.value = true;
+  }
+};
+
+setInterval(() => {
+  checkAuthState();
+}, 60 * 1000);
+
+onBeforeMount(() => {
+  checkAuthState();
+});
 </script>
 
 <template>
-  <header>
+  <Login v-if="!authState" />
+  <header v-if="authState">
     <div class="header-content">
       <img
         alt="Vue logo"
@@ -15,36 +37,52 @@ import { RouterLink, RouterView } from "vue-router";
     </div>
   </header>
 
-  <div class="content-container">
+  <div class="content-container" v-if="authState">
     <div class="sidebar">
       <div class="wrapper">
-        <RouterLink to="/" class="navigation-link">
-          <img src="assets/tour.svg" width="25" height="25" />
+        <RouterLink to="/touren" class="navigation-link">
+          <img src="@/assets/icons/tour.svg" width="25" height="25" />
           Touren
         </RouterLink>
         <RouterLink to="/guides" class="navigation-link">
-          <img src="assets/guide.svg" width="25" height="25" />
+          <img src="@/assets/icons/guide.svg" width="25" height="25" />
           Guides
         </RouterLink>
         <RouterLink to="/sprachen" class="navigation-link">
-          <img src="assets/language.svg" width="25" height="25" />
+          <img src="@/assets/icons/language.svg" width="25" height="25" />
           Sprachen
         </RouterLink>
         <RouterLink to="/mobilitaet" class="navigation-link">
-          <img src="assets/mobility.svg" width="25" height="25" />
+          <img src="@/assets/icons/mobility.svg" width="25" height="25" />
           Mobilität
         </RouterLink>
         <RouterLink to="/orte" class="navigation-link">
-          <img src="assets/place.svg" width="25" height="25" />
+          <img src="@/assets/icons/place.svg" width="25" height="25" />
           Orte
         </RouterLink>
         <RouterLink to="/kategorien" class="navigation-link">
-          <img src="assets/category.svg" width="25" height="25" />
+          <img src="@/assets/icons/category.svg" width="25" height="25" />
           Kategorie
+        </RouterLink>
+        <RouterLink to="/zertifikate" class="navigation-link">
+          <img src="@/assets/icons/verify.svg" width="25" height="25" />
+          Zertifikate
+        </RouterLink>
+        <RouterLink to="/skills" class="navigation-link">
+          <img src="@/assets/icons/skill.svg" width="25" height="25" />
+          Skills
+        </RouterLink>
+        <RouterLink to="/pages" class="navigation-link">
+          <img src="@/assets/icons/page.svg" width="25" height="25" />
+          Seiten
+        </RouterLink>
+        <RouterLink to="/verwaltung" class="navigation-link align-bottom">
+          <img src="@/assets/icons/usermanagement.svg" width="25" height="25" />
+          Benutzerverwaltung
         </RouterLink>
       </div>
     </div>
-    <RouterView class="view"/>
+    <RouterView class="view" v-if="authState"/>
   </div>
 </template>
 
@@ -55,7 +93,8 @@ header {
   left: 0;
   right: 0;
   padding: 20px 0;
-  background-color: #f1f3f5;
+  background-color: var(--secondary-color);
+  z-index: 999;
 }
 
 .header-content {
@@ -72,13 +111,16 @@ header {
   left: 0;
   bottom: 0;
   min-width: 300px;
-  background-color: #f1f3f5;
+  background-color: var(--secondary-color);
+  z-index: 999;
 }
 
 .sidebar .wrapper {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  position: relative;
 }
 
 .sidebar .wrapper .navigation-link {
@@ -89,13 +131,26 @@ header {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #000;
+  color: var(--primary-color);
   letter-spacing: 1px;
   transition: .3s ease-in-out;
 }
 
+.align-bottom {
+  margin-top: auto;
+  position: absolute;
+  width: unset !important;
+  bottom: 30px;
+  left: 20px;
+  right: 20px;
+}
+
+.router-link-active {
+  background-color: var(--primary-color-light);
+}
+
 .sidebar .wrapper .navigation-link:hover {
-  background-color: var(--vt-c-indigo);
+  background-color: var(--primary-color-light);
   cursor: pointer;
 }
 

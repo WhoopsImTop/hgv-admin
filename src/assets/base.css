@@ -1,39 +1,10 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
-
-  --vt-c-black: #484E67;
-  --vt-c-black-soft: #545c7b;
-  --vt-c-black-mute: #616885;
-
-  --vt-c-indigo: #D8E1ED;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
+  --light-color: #f8f9f9;
+  --secondary-color: #d8e1ed;
+  --primary-color: #023058;
+  --primary-color-light: #cbd5e2;
+  --primary-color-dark: #02223d;
 }
 
 *,
@@ -46,10 +17,60 @@
 
 body {
   min-height: 100vh;
-  color: var(--vt-c-black);
-  background: var(--color-background);
-  font-family: 'Poppins', sans-serif;
+  color: var(--primary-color);
+  background: var(--light-color);
+  font-family: 'Clash Grotesk', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+  font-size: 16px;
+}
+
+.button-primary {
+  background: var(--primary-color);
+  color: var(--light-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  font-size: 16px;
+  font-family: var(--font-family);
+  border: 2px solid var(--primary-color);
+  background-color: none;
+  border-radius: 5px;
+  outline: none;
+  width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 1px;
+}
+
+.errorMessages {
+  margin-top: 10px;
+}
+
+.errorMessages p {
+  color: rgb(175, 54, 54);
+  margin-top: 5px;
 }

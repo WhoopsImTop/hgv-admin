@@ -1,0 +1,23 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between
+}
+
+.content-row {
+    border: 1px solid var(--secondary-color);
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.input-container {
+    margin: 20px 0;
+}
+
+.languageContainer {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+}

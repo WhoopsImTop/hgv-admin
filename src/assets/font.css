@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Clash Grotesk';
+    src: url('@/assets/fonts/ClashGrotesk-Black.woff2') format('woff2'), url('@/assets/fonts/ClashGrotesk-Black.woff') format('woff');
+}
+
+h1 {
+    font-family: 'Clash Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+h2 {
+    font-family: 'Clash Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 25px;
+    line-height: 1.2;
+}
+
+h3 {
+    font-family: 'Clash Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+h4 {
+    font-family: 'Clash Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+p, a, span, li, input, textarea, button {
+    font-family: 'Clash Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.2;
+}

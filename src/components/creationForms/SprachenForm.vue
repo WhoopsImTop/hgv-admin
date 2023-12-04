@@ -262,6 +262,19 @@ onBeforeMount(() => {
         />
       </template>
     </LanguageContainer>
+    <div>
+      <a
+        style="margin-top: 15px; margin-bottom: 5px; text-decoration: underline;"
+        href="https://www.welt-flaggen.de/register/laenderkuerzel/"
+      >
+        Liste der Länderkürzel
+      </a>
+      <p>
+        Bitte die Kürzel der Länder von dieser Seite nehmen damit die Flaggen
+        erscheinen. Über die Suche werden die Kürzel sofort dargestellt
+        (2-Stellig).
+      </p>
+    </div>
   </div>
   <div class="content-row">
     <button

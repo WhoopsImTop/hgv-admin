@@ -177,7 +177,10 @@ const updateGuide = () => {
   }
 
   //if guideData.image is object get id key
-  if (typeof guideData.value.image === "object") {
+  if (
+    typeof guideData.value.image === "object" &&
+    guideData.value.image !== null
+  ) {
     guideData.value.image = guideData.value.image.id;
   }
 
@@ -304,7 +307,9 @@ const loadGuideData = () => {
         guideData.value.contact = {};
       }
 
-      imagePreview.value = res.data.guide.image.url || null;
+      imagePreview.value = res.data.guide.image
+        ? res.data.guide.image.url
+        : null;
       guideData.value.languages = res.data.guide.languages;
       guideData.value.skills = res.data.guide.skills;
       guideData.value.mobility = res.data.guide.mobility;
@@ -316,20 +321,26 @@ const loadGuideData = () => {
       //set tinymce content
       tinymce
         .get("editor_de")
-        .setContent(res.data.guide.translations[0].description);
+        .setContent(res.data.guide.translations[0].description || "");
       tinymce
         .get("editor_en")
-        .setContent(res.data.guide.translations[1].description);
+        .setContent(res.data.guide.translations[1].description || "");
 
       console.log(guideData);
     })
     .catch((err) => {
+      console.log(err);
       if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
         console.log(err);
       }
     });
+};
+
+const removeImage = () => {
+  guideData.value.image = null;
+  imagePreview.value = null;
 };
 
 //remove tinymce editor on unmount
@@ -458,6 +469,7 @@ onBeforeMount(() => {
     <div class="image" v-if="imagePreview">
       <img :src="imagePreview" />
     </div>
+    <a  v-if="imagePreview" @click="removeImage" class="removeImage">Bild entfernen</a>
     <div class="row">
       <div class="col">
         <input type="file" @change="uploadImage" />
@@ -477,4 +489,13 @@ onBeforeMount(() => {
   </div>
 </template>
 
-<style></style>
+<style>
+.removeImage {
+  color: red;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid red;
+  display: inline-block;
+}
+</style>

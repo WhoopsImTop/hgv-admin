@@ -40,6 +40,7 @@ const tourData = ref({
   is_public: false,
   date: null,
   duration: null,
+  needs_registration: false,
   price: 0.0,
   guides: [],
   places: [],
@@ -326,6 +327,11 @@ onBeforeMount(() => {
                 placeholder="bspw. 10.50€"
               />
             </div>
+            <toggle-switch
+              :value="tourData.needs_registration"
+              titel="Anmeldung erforderlich"
+              @input="tourData.needs_registration = $event"
+            />
           </div>
         </div>
       </div>

@@ -32,6 +32,9 @@ const fetchAllGuides = () => {
 };
 
 const deleteGuide = (id) => {
+  if (!window.confirm("Willst du diesen Guide wirklich löschen?")) {
+    return;
+  }
   axios
     .delete(`/guides/${id}`, {
       headers: {

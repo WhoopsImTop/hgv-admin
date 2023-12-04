@@ -39,6 +39,7 @@ const tourData = ref({
   is_public: false,
   date: new Date(),
   duration: null,
+  needs_registration: false,
   price: 0.0,
   guides: [],
   places: [],
@@ -69,11 +70,17 @@ const router = useRouter();
 const errors = ref([]);
 
 const computedPrice = computed(() => {
+  if (typeof tourData.value.price === "number") {
+    return tourData.value.price;
+  }
   const price = tourData.value.price.replace(",", ".").replace(/[^0-9.]/g, "");
   return price;
 });
 
 const computedDuration = computed(() => {
+  if (typeof tourData.value.duration === "number") {
+    return tourData.value.duration;
+  }
   const duration = tourData.value.duration
     .replace(",", ".")
     .replace(/[^0-9.]/g, "");
@@ -413,6 +420,11 @@ onBeforeMount(() => {
               <h5>Preis</h5>
               <input type="text" v-model="tourData.price" />
             </div>
+            <toggle-switch
+              :value="tourData.needs_registration"
+              titel="Anmeldung erforderlich"
+              @input="tourData.needs_registration = $event"
+            />
           </div>
         </div>
       </div>

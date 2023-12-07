@@ -16,10 +16,10 @@ const tableColumns = ref([
 const fetchAllGuides = () => {
   dataLoading.value = true;
   axios
-    .get("/guides")
+    .get("/guides?per_page=200")
     .then((res) => {
       dataLoading.value = false;
-      guideData.value = res.data.guides;
+      guideData.value = res.data.guides.data;
     })
     .catch((err) => {
       dataLoading.value = false;

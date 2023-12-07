@@ -308,7 +308,7 @@ const loadGuideData = () => {
       }
 
       imagePreview.value = res.data.guide.image
-        ? res.data.guide.image.url
+        ? res.data.guide.image[0].url
         : null;
       guideData.value.languages = res.data.guide.languages;
       guideData.value.skills = res.data.guide.skills;
@@ -316,7 +316,7 @@ const loadGuideData = () => {
       guideData.value.certificates = res.data.guide.certificates;
       //set image preview
       if (res.data.guide.image !== null) {
-        imagePreview.value = res.data.guide.image.url;
+        imagePreview.value = res.data.guide.image[0].url
       }
       //set tinymce content
       tinymce

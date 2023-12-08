@@ -46,7 +46,7 @@
         >
           <div class="option-content">
             <div class="option-avatar" v-if="guide.image">
-              <img :src="guide.image.url" alt="avatar" />
+              <img :src="guide.image[0].url" alt="avatar" />
             </div>
             <div class="option-name">{{ guide.name }}</div>
           </div>
@@ -94,8 +94,8 @@ const setNewGuide = (guide) => {
 };
 
 const getGuides = async () => {
-  const response = await axios.get("/guides");
-  return response.data.guides;
+  const response = await axios.get("/guides?preview=true");
+  return response.data.guides.data;
 };
 
 const selectGuide = (guide) => {

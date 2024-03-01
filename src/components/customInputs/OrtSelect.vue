@@ -10,7 +10,7 @@
         />
       </div>
     </div>
-    <div class="select-container">
+    <div class="select-container" v-if="places.length > 0">
       <div class="combobox" @click="showSearchResults = true">
         <div class="chip-container">
           <div class="chip" v-for="place in selectedplaces" :key="place.id">
@@ -62,6 +62,11 @@
         >
           "{{ search }}" hinzufügen ?
         </div>
+      </div>
+    </div>
+    <div v-else class="loadingIndicator">
+      <div class="combobox">
+        <span>Lade Orte...</span>
       </div>
     </div>
   </div>

@@ -6,7 +6,7 @@
         <guide-form insidePopup="true" @closePopup="showAddPopup = false" @newGuide="setNewGuide"/>
       </div>
     </div>
-    <div class="select-container">
+    <div class="select-container" v-if="guides.length > 0">
       <div class="combobox" @click="showSearchResults = true">
         <div class="chip-container">
           <div class="chip" v-for="guide in selectedGuides" :key="guide.id">
@@ -60,6 +60,11 @@
         </div>
       </div>
     </div>
+    <div v-else class="loadingIndicator">
+      <div class="combobox">
+        <span>Lade Guides...</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -94,7 +99,7 @@ const setNewGuide = (guide) => {
 };
 
 const getGuides = async () => {
-  const response = await axios.get("/guides?preview=true");
+  const response = await axios.get("/guides?preview=true&per_page=300");
   return response.data.guides.data;
 };
 

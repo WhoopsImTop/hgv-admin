@@ -1,9 +1,12 @@
 <script setup>
+import imageCompression from "browser-image-compression";
+
 import LanguageContainer from "../../components/LanguageContainer.vue";
 import toggleSwitch from "../../components/customInputs/toggleSwitch.vue";
 import GuideSelect from "../../components/customInputs/GuideSelect.vue";
 import OrtSelect from "../../components/customInputs/OrtSelect.vue";
 import KategorieSelect from "../../components/customInputs/KategorieSelect.vue";
+import MobilitySelect from "../../components/customInputs/MobilitaetSelect.vue";
 import MapComponent from "../../components/MapComponent.vue";
 import axios from "axios";
 
@@ -53,6 +56,7 @@ const tourData = ref({
 const guideSelect = ref(null);
 const ortSelect = ref(null);
 const kategorieSelect = ref(null);
+const mobilitySelect = ref(null);
 const mapContainer = ref(null);
 
 //data
@@ -77,10 +81,61 @@ const computedDuration = computed(() => {
   return duration;
 });
 
+const fileSizeError = ref("");
+const fileToCompresse = ref(null);
+const compressingImage = ref(false);
+
+const compressFile = () => {
+  compressingImage.value = true;
+  //use browser image compression to compress image
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
+  if (fileToCompresse.value) {
+    imageCompression(fileToCompresse.value, options)
+      .then((compressedFile) => {
+        const formData = new FormData();
+        formData.append("file", compressedFile);
+
+        axios
+          .post("/media", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            images.value.push(res.data.media);
+            compressingImage.value = false;
+          })
+          .catch((err) => {
+            console.log(err);
+            window.alert("Fehler beim Upload des Bildes");
+            compressingImage.value = null;
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        window.alert("Fehler beim Komprimieren des Bildes");
+      });
+  }
+};
+
 //functions
 const uploadImage = (e) => {
+  fileSizeError.value = "";
   const files = e.target.files;
-  console.log(files);
+  //get file size
+  const fileSize = files[0].size / 1024 / 1024; // in MB
+  if (fileSize > 1) {
+    fileSizeError.value =
+      "Bild(" + fileSize.toFixed(2) + "MB) ist zu groß (max. 1MB)";
+    fileToCompresse.value = files[0];
+    return;
+  }
   if (files) {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -154,10 +209,17 @@ const saveTour = () => {
   const guides = guideSelect.value.getData();
   const places = ortSelect.value.getData();
   const themes = kategorieSelect.value.getData();
+  const mobilities = mobilitySelect.value.getData();
 
   tourData.value.guides = guides;
   tourData.value.places = places;
   tourData.value.themes = themes;
+
+  if (mobilities.length === 0) {
+    tourData.value.mobilities = null;
+  } else {
+    tourData.value.mobilities = mobilities;
+  }
 
   if (tourData.value.is_public) {
     tourData.value.price = computedPrice.value;
@@ -298,6 +360,15 @@ onBeforeMount(() => {
             </div>
           </div>
           <input type="file" @change="uploadImage" />
+          <p class="error">{{ fileSizeError }}</p>
+          <button
+            v-if="fileSizeError"
+            class="button-primary"
+            @click="compressFile"
+            :disabled="compressingImage"
+          >
+            {{ compressingImage ? "Komprimiere Bild..." : "Bild verkleinern" }}
+          </button>
         </div>
         <div class="content-row">
           <toggle-switch
@@ -351,6 +422,11 @@ onBeforeMount(() => {
           <h4>Kategorien hinzufügen</h4>
           <hr class="divider" />
           <kategorie-select ref="kategorieSelect" />
+        </div>
+        <div class="sidebar-item">
+          <h4>Mobilität hinzufügen</h4>
+          <hr class="divider" />
+          <mobility-select ref="mobilitySelect" />
         </div>
         <div class="sidebar-item">
           <h4>Veröffentlichen</h4>
@@ -422,11 +498,23 @@ onBeforeMount(() => {
   background: transparent;
   border: none;
   cursor: pointer;
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  padding: 2px;
 }
 
 .image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.error {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  color: var(--error-color);
+  font-weight: regular !important;
 }
 </style>

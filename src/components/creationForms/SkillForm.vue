@@ -66,8 +66,8 @@ const createSkill = () => {
     })
     .then((res) => {
       buttonText.value = props.editMode
-        ? "Skill aktualisieren"
-        : "Skill erstellen";
+        ? "Thema aktualisieren"
+        : "Thema erstellen";
       if (props.insidePopup) {
         emit("newSkill", res.data.skill);
       } else {
@@ -92,17 +92,19 @@ const updateSkill = () => {
     return;
   }
   buttonText.value = props.editMode
-    ? "Skill aktualisieren..."
-    : "Skill erstellen...";
+    ? "Thema aktualisieren..."
+    : "Thema erstellen...";
 
-  if (skillData.value.image !== null) {
+  if (skillData.value.image && skillData.value.image !== null) {
     skillData.value.image = skillData.value.image.id;
   }
 
-  if (skillData.value.guides !== null) {
+  if (skillData.value.guides !== null && skillData.value.guides.length > 0) {
     skillData.value.guides = skillData.value.guides.map((guide) => {
       return guide.id;
     });
+  } else {
+    skillData.value.guides = null;
   }
 
   axios
@@ -121,12 +123,12 @@ const updateSkill = () => {
     .catch((err) => {
       console.log(err);
       buttonText.value = props.editMode
-        ? "Skill aktualisieren"
-        : "Skill erstellen";
+        ? "Thema aktualisieren"
+        : "Thema erstellen";
       if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
-        window.alert("Fehler beim Aktualisieren der Skill");
+        window.alert("Fehler beim Aktualisieren des Themas");
       }
     });
 };
@@ -203,7 +205,7 @@ onBeforeMount(() => {
 
 <template>
   <div class="row">
-    <h1>{{ props.editMode ? "Skill Aktualisieren" : "Skill Erstellen" }}</h1>
+    <h1>{{ props.editMode ? "Thema Aktualisieren" : "Thema Erstellen" }}</h1>
     <router-Link v-if="!props.insidePopup" to="/skills" class="button-primary"
       >Abbrechen</router-Link
     >

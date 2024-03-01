@@ -128,17 +128,17 @@ const updateCertificate = () => {
   certificateData.value["description:en"] = tinymce
     .get("editor_en")
     .getContent();
+  console.log(certificateData.value);
+  if (certificateData.value.image && certificateData.value.image !== null) {
+    certificateData.value.image = certificateData.value.image;
+  }
 
   axios
-    .patch(
-      `/certificates/${props.id}`,
-      certificateData.value,
-      {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-      }
-    )
+    .patch(`/certificates/${props.id}`, certificateData.value, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       buttonText.value = props.editMode
         ? "Zertifikat aktualisieren"
@@ -232,7 +232,10 @@ const loadcertificateData = () => {
         res.data.certificate.translations[0].name;
       certificateData.value["name:en"] =
         res.data.certificate.translations[1].name;
-      certificateData.value.image = res.data.certificate.image;
+      
+      if(res.data.certificate.image && res.data.certificate.image !== null) {
+        certificateData.value.image = res.data.certificate.image;
+      }
       //set image preview
       if (res.data.certificate.image !== null) {
         imagePreview.value = res.data.certificate.image.url;

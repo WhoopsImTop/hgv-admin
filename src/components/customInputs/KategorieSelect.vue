@@ -10,7 +10,7 @@
         />
       </div>
     </div>
-    <div class="select-container">
+    <div class="select-container" v-if="themes.length > 0">
       <div class="combobox" @click="showSearchResults = true">
         <div class="chip-container">
           <div
@@ -68,6 +68,11 @@
         >
           "{{ search }}" hinzufügen ?
         </div>
+      </div>
+    </div>
+    <div v-else class="loadingIndicator">
+      <div class="combobox">
+        <span>Lade Kategorien...</span>
       </div>
     </div>
   </div>

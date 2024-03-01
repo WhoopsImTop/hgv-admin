@@ -28,10 +28,10 @@ const tableColumns = ref([
 const fetchAllTours = () => {
   dataLoading.value = true;
   axios
-    .get("/tours")
+    .get("/tours?preview=true&per_page=200&status=all")
     .then((res) => {
       dataLoading.value = false;
-      tableData.value = res.data.tours;
+      tableData.value = res.data.tours.data;
     })
     .catch((err) => {
       dataLoading.value = false;
@@ -39,12 +39,17 @@ const fetchAllTours = () => {
         sessionStorage.removeItem("token");
       } else {
         console.log(err);
-        window.alert("Es ist ein Fehler aufgetreten, bitte versuche es erneut.");
+        window.alert(
+          "Es ist ein Fehler aufgetreten, bitte versuche es erneut."
+        );
       }
     });
 };
 
 const deleteTour = (id) => {
+  const tourName = tableData.value.find((tour) => tour.id === id).name;
+  if (!window.confirm(`Möchtest du die Tour "${tourName}" wirklich löschen?`))
+    return;
   axios
     .delete(`/tours/${id}`, {
       headers: {
@@ -61,7 +66,9 @@ const deleteTour = (id) => {
         sessionStorage.removeItem("token");
       } else {
         console.log(err);
-        window.alert("Die Tour konnte nicht gelöscht werden. Bitte versuche es erneut.");
+        window.alert(
+          "Die Tour konnte nicht gelöscht werden. Bitte versuche es erneut."
+        );
       }
     });
 };

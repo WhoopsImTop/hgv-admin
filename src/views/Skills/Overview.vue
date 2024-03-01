@@ -16,7 +16,7 @@ const tableColumns = ref([
 const fetchAllSkills = () => {
   dataLoading.value = true;
   axios
-    .get("/skills")
+    .get("/skills?preview=true")
     .then((res) => {
       dataLoading.value = false;
       skillData.value = res.data.skills;
@@ -24,7 +24,7 @@ const fetchAllSkills = () => {
     .catch((err) => {
       dataLoading.value = false;
       console.log(err);
-      if(err.response.status === 401) {
+      if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       }
       window.alert("Es ist ein Fehler aufgetreten, bitte versuche es erneut.");
@@ -43,10 +43,12 @@ const deleteSkill = (id) => {
     })
     .catch((err) => {
       console.log(err);
-      if(err.response.status === 401) {
+      if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       }
-      window.alert("Der Skill konnte nicht gelöscht werden. Bitte versuche es erneut.");
+      window.alert(
+        "Der Skill konnte nicht gelöscht werden. Bitte versuche es erneut."
+      );
     });
 };
 
@@ -58,13 +60,20 @@ onMounted(() => {
 <template>
   <main>
     <div class="row">
-      <h1>Alle Skills</h1>
+      <div>
+        <h1>Alle Themen</h1>
+        <p>Themen werden Guides Vergeben (Webseite Filter Themen)</p>
+      </div>
       <router-link to="/skill-erstellen" class="button-primary"
-        >Skill hinzufügen</router-link
+        >Thema hinzufügen</router-link
       >
     </div>
     <hr class="divider" />
-    <IDLTable :tableData="skillData" :tableColumns="tableColumns" :loading="dataLoading">
+    <IDLTable
+      :tableData="skillData"
+      :tableColumns="tableColumns"
+      :loading="dataLoading"
+    >
       <template #actions> Aktionen </template>
       <template #tableActions="slotProps">
         <RouterLink :to="`/skill-bearbeiten/${slotProps.row.id}`">

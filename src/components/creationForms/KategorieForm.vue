@@ -105,7 +105,7 @@ const updateKategorie = () => {
     ? "Kategorie aktualisieren..."
     : "Kategorie erstellen...";
 
-  if (kategorieData.value.image !== null) {
+  if (kategorieData.value.image && kategorieData.value.image !== null) {
     kategorieData.value.image = kategorieData.value.image.id;
   }
 
@@ -137,7 +137,7 @@ const updateKategorie = () => {
       buttonText.value = props.editMode
         ? "Kategorie aktualisieren"
         : "Kategorie erstellen";
-      if (err.response.status === 401) {
+      if (err.response && err.response.status && err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
         window.alert("Fehler beim Aktualisieren der Kategorie");
@@ -194,12 +194,12 @@ const loadkategorieData = () => {
       kategorieData.value["name:en"] = res.data.theme.translations[1].name;
       kategorieData.value.image = res.data.theme.image;
       //set image preview
-      if (res.data.theme.image !== null) {
+      if (res.data.theme.image && res.data.theme.image !== null) {
         imagePreview.value = res.data.theme.image.url;
       }
     })
     .catch((err) => {
-      if (err.response.status === 401) {
+      if (err.response && err.response.status && err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
         console.log(err);

@@ -16,7 +16,7 @@ const tableColumns = ref([
 const fetchAllGuides = () => {
   dataLoading.value = true;
   axios
-    .get("/guides?per_page=200")
+    .get("/guides?preview=true&per_page=200")
     .then((res) => {
       dataLoading.value = false;
       guideData.value = res.data.guides.data;

@@ -70,7 +70,7 @@ onBeforeMount(() => {
         </RouterLink>
         <RouterLink to="/skills" class="navigation-link">
           <img src="@/assets/icons/skill.svg" width="25" height="25" />
-          Skills
+          Themen
         </RouterLink>
         <RouterLink to="/pages" class="navigation-link">
           <img src="@/assets/icons/page.svg" width="25" height="25" />

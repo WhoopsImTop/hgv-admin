@@ -12,6 +12,7 @@
     "@googlemaps/js-api-loader": "^1.16.2",
     "@maptiler/sdk": "^1.1.2",
     "axios": "^1.5.0",
+    "browser-image-compression": "^2.0.2",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^2.15.0",
     "pinia": "^2.1.6",

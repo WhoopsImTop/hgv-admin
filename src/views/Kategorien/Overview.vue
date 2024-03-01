@@ -32,6 +32,11 @@ const fetchAllKategorien = () => {
 };
 
 const deleteKategorie = (id) => {
+  const kategorieName = KategorieData.value.find(
+    (kategorie) => kategorie.id === id
+  ).name;
+  if (!window.confirm(`Möchtest du die Kategorie "${kategorieName}" wirklich löschen?`))
+    return;
   axios
     .delete(`/themes/${id}`, {
       headers: {

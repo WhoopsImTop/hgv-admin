@@ -76,6 +76,10 @@ onBeforeMount(() => {
           <img src="@/assets/icons/page.svg" width="25" height="25" />
           Seiten
         </RouterLink>
+        <RouterLink to="/blog" class="navigation-link">
+          <img src="@/assets/icons/page.svg" width="25" height="25" />
+          Blog
+        </RouterLink>
         <RouterLink to="/verwaltung" class="navigation-link align-bottom">
           <img src="@/assets/icons/usermanagement.svg" width="25" height="25" />
           Benutzerverwaltung

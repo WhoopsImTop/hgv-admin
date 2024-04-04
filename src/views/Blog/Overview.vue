@@ -3,7 +3,7 @@ import IDLTable from "@/components/IDLTable.vue";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
-const pageData = ref([]);
+const blogData = ref([]);
 const dataLoading = ref(false);
 
 const tableColumns = ref([
@@ -16,10 +16,10 @@ const tableColumns = ref([
 const fetchAllPages = () => {
   dataLoading.value = true;
   axios
-    .get("/pages")
+    .get("/blogs")
     .then((res) => {
       dataLoading.value = false;
-      pageData.value = res.data;
+      blogData.value = res.data;
     })
     .catch((err) => {
       dataLoading.value = false;
@@ -32,10 +32,10 @@ const fetchAllPages = () => {
 };
 
 const deletePage = (id) => {
-  if (!window.confirm("Sind Sie sicher, dass Sie diese Seite löschen möchten?"))
+  if (!window.confirm("Sind Sie sicher, dass Sie diese Blogbeitrag löschen möchten?"))
     return;
   axios
-    .delete(`/pages/${id}`, {
+    .delete(`/blogs/${id}`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
@@ -49,7 +49,7 @@ const deletePage = (id) => {
         sessionStorage.removeItem("token");
       }
       window.alert(
-        "Die Seite konnte nicht gelöscht werden. Bitte versuche es erneut."
+        "Die Blogbeitrag konnte nicht gelöscht werden. Bitte versuche es erneut."
       );
     });
 };
@@ -62,17 +62,20 @@ onMounted(() => {
 <template>
   <main>
     <div class="row">
-      <h1>Alle Seiten</h1>
+      <h1>Alle Blogbeitragn</h1>
+      <router-link to="/blog-erstellen" class="button-primary"
+        >Blogbeitrag hinzufügen</router-link
+      >
     </div>
     <hr class="divider" />
     <IDLTable
-      :tableData="pageData"
+      :tableData="blogData"
       :tableColumns="tableColumns"
       :loading="dataLoading"
     >
       <template #actions> Aktionen </template>
       <template #tableActions="slotProps">
-        <RouterLink :to="`/page-bearbeiten/${slotProps.row.id}`">
+        <RouterLink :to="`/blog-bearbeiten/${slotProps.row.id}`">
           <img src="@/assets/icons/edit.svg" width="20" />
         </RouterLink>
         <button @click="deletePage(slotProps.row.id)">

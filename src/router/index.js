@@ -39,6 +39,10 @@ import PageOverview from "../views/Pages/Overview.vue";
 import PageCreate from "../views/Pages/Create.vue";
 import PageEdit from "../views/Pages/Edit.vue";
 
+import BlogOverview from "../views/Blog/Overview.vue";
+import BlogCreate from "../views/Blog/Create.vue";
+import BlogEdit from "../views/Blog/Edit.vue";
+
 import GettingStarted from "../views/GettingStarted.vue";
 
 const router = createRouter({
@@ -198,6 +202,21 @@ const router = createRouter({
       path: "/page-bearbeiten/:id",
       name: "page-bearbeiten",
       component: PageEdit,
+    },
+    {
+      path: "/blog",
+      name: "blog",
+      component: BlogOverview,
+    },
+    {
+      path: "/blog-erstellen",
+      name: "blog-erstellen",
+      component: BlogCreate,
+    },
+    {
+      path: "/blog-bearbeiten/:id",
+      name: "blog-bearbeiten",
+      component: BlogEdit,
     },
   ],
   scrollBehavior(to, from, savedPosition) {

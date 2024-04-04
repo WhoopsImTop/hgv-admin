@@ -6,6 +6,7 @@ import OrtSelect from "../../components/customInputs/OrtSelect.vue";
 import KategorieSelect from "../../components/customInputs/KategorieSelect.vue";
 import MobilitySelect from "../../components/customInputs/MobilitaetSelect.vue";
 import MapComponent from "../../components/MapComponent.vue";
+import TourDateSetter from "../../components/customInputs/TourDateSetter.vue";
 import axios from "axios";
 
 import tinymce from "tinymce";
@@ -47,6 +48,7 @@ const tourData = ref({
   places: [],
   images: [],
   main_image: null,
+  image_copyright: "",
   themes: [],
   created_at: null,
   updated_at: null,
@@ -118,7 +120,6 @@ const fetchTourData = () => {
         }
         tourData.value.status = res.data.tour.status;
         tourData.value.is_public = res.data.tour.is_public;
-        tourData.value.date = res.data.tour.date;
         tourData.value.duration = res.data.tour.duration;
         tourData.value.needs_registration = res.data.tour.needs_registration;
         tourData.value.mobilities = res.data.tour.mobilities || null;
@@ -127,6 +128,8 @@ const fetchTourData = () => {
         tourData.value.places = res.data.tour.places;
         tourData.value.images = res.data.tour.images;
         tourData.value.main_image = res.data.tour.main_image;
+        tourData.value.image_copyright =
+          res.data.tour.image_copyright || "unset";
         tourData.value.themes = res.data.tour.themes;
         tourData.value.created_at = res.data.tour.created_at;
         tourData.value.updated_at = res.data.tour.updated_at;
@@ -326,10 +329,12 @@ const updateTour = () => {
   const themes = kategorieSelect.value.getData();
   const mobilities = mobilitySelect.value.getData();
 
+  tourData.value.image_copyright = tourData.value.image_copyright || "unset";
+
   tourData.value.guides = guides;
   tourData.value.places = places;
   tourData.value.themes = themes;
-  
+
   if (mobilities.length === 0) {
     tourData.value.mobilities = null;
   } else {
@@ -361,6 +366,7 @@ const updateTour = () => {
         sessionStorage.removeItem("token");
       } else {
         window.alert("Tour konnte nicht aktualisiert werden");
+        buttonText.value = "Aktualisieren";
       }
     });
 };
@@ -467,6 +473,13 @@ onBeforeMount(() => {
           >
             {{ compressingImage ? "Komprimiere Bild..." : "Bild verkleinern" }}
           </button>
+
+          <div class="divider"></div>
+          <input
+            type="text"
+            v-model="tourData.image_copyright"
+            placeholder="Bild Copyright"
+          />
         </div>
         <div class="content-row">
           <toggle-switch
@@ -477,15 +490,14 @@ onBeforeMount(() => {
           <div v-if="tourData.is_public">
             <hr class="divider" />
             <div class="input-container">
-              <h5>Datum der Tour</h5>
-              <input type="date" v-model="tourData.date" />
+              <TourDateSetter />
             </div>
             <div class="input-container">
-              <h5>Wie lange geht die Tour</h5>
+              <h5>Wann startet diese Tour</h5>
               <input
                 type="text"
                 v-model="tourData.duration"
-                placeholder="bspw. 1,5 Stunden"
+                placeholder="bspw. 14:30 Uhr"
               />
             </div>
             <div class="input-container">

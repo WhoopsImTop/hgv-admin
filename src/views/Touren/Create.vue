@@ -48,6 +48,7 @@ const tourData = ref({
   guides: [],
   places: [],
   images: [],
+  image_copyright: "",
   main_image: null,
   themes: [],
 });
@@ -211,6 +212,8 @@ const saveTour = () => {
   const themes = kategorieSelect.value.getData();
   const mobilities = mobilitySelect.value.getData();
 
+  tourData.value.image_copyright = tourData.value.image_copyright || "unset";
+
   tourData.value.guides = guides;
   tourData.value.places = places;
   tourData.value.themes = themes;
@@ -242,6 +245,7 @@ const saveTour = () => {
         sessionStorage.removeItem("token");
       } else {
         window.alert("Tour konnte nicht erstellt werden");
+        buttonText.value = "Tour erstellen";
       }
     });
 };
@@ -369,6 +373,9 @@ onBeforeMount(() => {
           >
             {{ compressingImage ? "Komprimiere Bild..." : "Bild verkleinern" }}
           </button>
+
+          <div class="divider"></div>
+          <input type="text" v-model="tourData.image_copyright" placeholder="Bild Copyright" />
         </div>
         <div class="content-row">
           <toggle-switch
@@ -383,11 +390,11 @@ onBeforeMount(() => {
               <input type="date" v-model="tourData.date" />
             </div>
             <div class="input-container">
-              <h5>Wie lange geht die Tour</h5>
+              <h5>Wann startet diese Tour</h5>
               <input
                 type="text"
                 v-model="tourData.duration"
-                placeholder="bspw. 1,5 Stunden"
+                placeholder="bspw. 14:30 Uhr"
               />
             </div>
             <div class="input-container">

@@ -138,7 +138,11 @@ onMounted(async () => {
 watch(
   () => props.selectedMobilites,
   (newVal) => {
-    selectedMobilites.value = newVal;
+    if(newVal === null) {
+      selectedMobilites.value = [];
+    } else {
+      selectedMobilites.value = newVal;
+    }
   }
 );
 </script>

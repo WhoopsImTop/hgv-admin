@@ -137,7 +137,11 @@ onMounted(async () => {
 watch(
   () => props.selectedSkills,
   (newVal) => {
-    selectedSkills.value = newVal;
+    if (newVal === null) {
+      selectedSkills.value = [];
+    } else {
+      selectedSkills.value = newVal;
+    }
   }
 );
 </script>

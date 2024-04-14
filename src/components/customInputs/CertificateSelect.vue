@@ -132,7 +132,11 @@ onMounted(async () => {
 watch(
   () => props.selectedCertificate,
   (newVal) => {
-    selectedCertificate.value = newVal;
+    if(newVal === null) {
+      selectedCertificate.value = [];
+    } else {
+      selectedCertificate.value = newVal;
+    }
   }
 );
 </script>

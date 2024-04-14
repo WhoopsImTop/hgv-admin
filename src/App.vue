@@ -4,12 +4,17 @@ import { RouterLink, RouterView, useRoute } from "vue-router";
 import Login from "./views/Auth/Login.vue";
 
 const authState = ref(false);
+const isGuide = ref(false);
 
 const checkAuthState = () => {
   const token = sessionStorage.getItem("token");
+  const role = sessionStorage.getItem("role");
   if (!token) {
     authState.value = false;
   } else {
+    if (role === "guide") {
+      isGuide.value = true;
+    }
     authState.value = true;
   }
 };
@@ -38,7 +43,7 @@ onBeforeMount(() => {
   </header>
 
   <div class="content-container" v-if="authState">
-    <div class="sidebar">
+    <div class="sidebar" v-if="!isGuide">
       <div class="wrapper">
         <RouterLink to="/touren" class="navigation-link">
           <img src="@/assets/icons/tour.svg" width="25" height="25" />
@@ -86,7 +91,7 @@ onBeforeMount(() => {
         </RouterLink>
       </div>
     </div>
-    <RouterView class="view" v-if="authState"/>
+    <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState"/>
   </div>
 </template>
 
@@ -165,6 +170,12 @@ header {
 .view {
   margin-left: 300px;
   margin-top: 80px;
+  padding: 20px;
+}
+
+.guideContent {
+  margin: 80px auto 0;
+  max-width: 1440px;
   padding: 20px;
 }
 </style>

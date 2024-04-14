@@ -137,7 +137,11 @@ onMounted(async () => {
 watch(
   () => props.selectedLanguages,
   (newVal) => {
-    selectedLanguages.value = newVal;
+    if (newVal === null) {
+      selectedLanguages.value = [];
+    } else {
+      selectedLanguages.value = newVal;
+    }
   }
 );
 </script>

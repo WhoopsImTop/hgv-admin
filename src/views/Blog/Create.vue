@@ -21,11 +21,15 @@ import "tinymce/plugins/table";
 import contentUiCss from "tinymce/skins/ui/oxide/content.css?inline";
 import contentCss from "tinymce/skins/content/default/content.css?inline";
 
+import { useRouter } from "vue-router";
+
 const blogData = ref({
   "name:de": "",
   "name:en": "",
   "description:de": "",
   "description:en": "",
+  "short_description:de": "",
+  "short_description:en": "",
   status: "entwurf",
   slug: "",
 });
@@ -35,6 +39,8 @@ const uploadedImage = ref(null);
 const imageUpload = ref(false);
 
 const buttonText = ref("Erstellen");
+
+const router = useRouter();
 
 const validateblogData = () => {
   if (blogData.value["name:de"] === "") {
@@ -54,6 +60,12 @@ const savePage = () => {
 
   blogData.value["description:de"] = tinymce.get("editor_de").getContent();
   blogData.value["description:en"] = tinymce.get("editor_en").getContent();
+  blogData.value["short_description:de"] = tinymce
+    .get("short_description_editor_de")
+    .getContent();
+  blogData.value["short_description:en"] = tinymce
+    .get("short_description_editor_en")
+    .getContent();
 
   //generate a slug
   blogData.value.slug = blogData.value["name:de"]
@@ -140,7 +152,7 @@ onMounted(async () => {
   bullist numlist outdent indent | removeformat | table | link | code",
     menubar: false,
     statusbar: false,
-    height: 600,
+    height: 300,
     setup: (editor) => {
       editor.on("init", () => {
         editor.setContent("<p></p>");
@@ -165,63 +177,99 @@ onBeforeUnmount(() => {
       <router-Link to="/blog" class="button-primary">Abbrechen</router-Link>
     </div>
     <hr class="divider" />
-    <div class="row content-row">
-      <LanguageContainer lang="de" title="Titel (DE)">
-        <template #content>
-          <input type="text" v-model="blogData['name:de']" placeholder="Name" />
-        </template>
-      </LanguageContainer>
-    </div>
-    <div class="row content-row">
-      <LanguageContainer lang="de" title="Beschreibung">
-        <template #content>
-          <button
-            class="button-primary"
-            style="margin-bottom: 10px; width: max-content"
-            @click="imageUpload = true"
-          >
-            Bild hochladen
-          </button>
-
-          <div v-if="imageUpload" class="imageUploader">
-            <div class="row content-row">
-              <input type="file" @change="uploadImage" />
-            </div>
-            <div class="row">
-              <button class="button-primary" @click="addImageToContent">
-                Bild einsetzen
+    <div class="grid-2-cols">
+      <div class="col">
+        <div class="row content-row">
+          <LanguageContainer lang="de" title="Titel (DE)">
+            <template #content>
+              <input
+                type="text"
+                v-model="blogData['name:de']"
+                placeholder="Name"
+              />
+            </template>
+          </LanguageContainer>
+        </div>
+        <div class="row content-row">
+          <LanguageContainer lang="de" title="Kurzbeschreibung">
+            <template #content>
+              <textarea
+                for="short_description"
+                placeholder="Beschreibung"
+                id="short_description_editor_de"
+              ></textarea>
+            </template>
+          </LanguageContainer>
+        </div>
+        <div class="row content-row">
+          <LanguageContainer lang="de" title="Inhalt der Seite">
+            <template #content>
+              <button
+                class="button-primary"
+                style="margin-bottom: 10px; width: max-content"
+                @click="imageUpload = true"
+              >
+                Bild hochladen
               </button>
-              <button class="button-secondary" @click="imageUpload = false">
-                Abbrechen
-              </button>
-            </div>
-          </div>
 
-          <textarea
-            for="description"
-            placeholder="Beschreibung"
-            id="editor_de"
-          ></textarea>
-        </template>
-      </LanguageContainer>
-    </div>
-    <div class="row content-row">
-      <LanguageContainer lang="en" title="Titel (EN)">
-        <template #content>
-          <input type="text" v-model="blogData['name:en']" placeholder="Name" />
-        </template>
-      </LanguageContainer>
-    </div>
-    <div class="row content-row">
-      <LanguageContainer lang="en" title="Description">
-        <template #content>
-          <textarea
-            for="description"
-            placeholder="Description"
-            id="editor_en"
-          ></textarea>
-        </template>
-      </LanguageContainer>
+              <div v-if="imageUpload" class="imageUploader">
+                <div class="row content-row">
+                  <input type="file" @change="uploadImage" />
+                </div>
+                <div class="row">
+                  <button class="button-primary" @click="addImageToContent">
+                    Bild einsetzen
+                  </button>
+                  <button class="button-secondary" @click="imageUpload = false">
+                    Abbrechen
+                  </button>
+                </div>
+              </div>
+
+              <textarea
+                for="description"
+                placeholder="Beschreibung"
+                id="editor_de"
+              ></textarea>
+            </template>
+          </LanguageContainer>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row content-row">
+          <LanguageContainer lang="en" title="Titel (EN)">
+            <template #content>
+              <input
+                type="text"
+                v-model="blogData['name:en']"
+                placeholder="Name"
+              />
+            </template>
+          </LanguageContainer>
+        </div>
+        <div class="row content-row">
+          <LanguageContainer lang="en" title="Short Description">
+            <template #content>
+              <textarea
+                for="short_description"
+                placeholder="Beschreibung"
+                id="short_description_editor_en"
+              ></textarea>
+            </template>
+          </LanguageContainer>
+        </div>
+        <div class="row content-row">
+          <LanguageContainer lang="en" title="Content of the Page">
+            <template #content>
+              <textarea
+                for="description"
+                placeholder="Description"
+                id="editor_en"
+              ></textarea>
+            </template>
+          </LanguageContainer>
+        </div>
+      </div>
     </div>
     <div class="content-row">
       <button class="button-primary" @click="savePage()">
@@ -246,5 +294,11 @@ onBeforeUnmount(() => {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 </style>

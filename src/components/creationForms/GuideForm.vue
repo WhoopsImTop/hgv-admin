@@ -39,6 +39,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showButton: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits(["closePopup", "newGuide"]);
@@ -106,6 +110,10 @@ const createGuide = () => {
 
   guideData.value["description:de"] = tinymce.get("editor_de").getContent();
   guideData.value["description:en"] = tinymce.get("editor_en").getContent();
+
+  if (guideData.value.contact.email != "") {
+    guideData.value.email = guideData.value.contact.email;
+  }
 
   axios
     .post("/guides", guideData.value, {
@@ -352,7 +360,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="row">
+  <div class="row" v-if="props.showButton">
     <h1>{{ props.editMode ? "Guide Aktualisieren" : "Guide Erstellen" }}</h1>
     <router-Link v-if="!props.insidePopup" to="/guides" class="button-primary"
       >Abbrechen</router-Link
@@ -360,6 +368,9 @@ onBeforeMount(() => {
     <button v-else class="button-primary" @click="emit('closePopup')">
       Abbrechen
     </button>
+  </div>
+  <div v-else>
+    <h1>Profil Aktualisieren</h1>
   </div>
   <hr class="divider" />
   <div class="row content-row">

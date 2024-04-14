@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 import LanguageContainer from "../../components/LanguageContainer.vue";
 
@@ -27,7 +27,9 @@ const blogData = ref({
   "name:en": "",
   "description:de": "",
   "description:en": "",
-  status: "entwurf",
+  "short_description:de": "",
+  "short_description:en": "",
+  status: "veröffentlicht",
   slug: "",
 });
 
@@ -37,6 +39,7 @@ const imageUpload = ref(false);
 
 const buttonText = ref("Erstellen");
 
+const router = useRouter();
 const route = useRoute();
 
 const validateblogData = () => {
@@ -57,6 +60,13 @@ const savePage = () => {
 
   blogData.value["description:de"] = tinymce.get("editor_de").getContent();
   blogData.value["description:en"] = tinymce.get("editor_en").getContent();
+  blogData.value["short_description:de"] = tinymce
+    .get("short_description_editor_de")
+    .getContent();
+
+  blogData.value["short_description:en"] = tinymce
+    .get("short_description_editor_en")
+    .getContent();
 
   //generate a slug
   blogData.value.slug = blogData.value["name:de"]
@@ -72,6 +82,7 @@ const savePage = () => {
     })
     .then(() => {
       window.onbeforeunload = null;
+      //redirect to blog page
       router.push("/blog");
     })
     .catch((err) => {
@@ -136,6 +147,10 @@ onMounted(async () => {
     blogData.value["name:en"] = res.data.translations[1].name;
     blogData.value["description:de"] = res.data.translations[0].description;
     blogData.value["description:en"] = res.data.translations[1].description;
+    blogData.value["short_description:de"] =
+      res.data.translations[0].short_description;
+    blogData.value["short_description:en"] =
+      res.data.translations[1].short_description;
     blogData.value.status = res.data.status;
     buttonText.value = "Aktualisieren";
   }
@@ -153,7 +168,7 @@ onMounted(async () => {
       bullist numlist outdent indent | removeformat | table | link | code",
     menubar: false,
     statusbar: false,
-    height: 600,
+    height: 300,
     setup: (editor) => {
       editor.on("init", () => {
         editor.setContent("<p></p>");
@@ -165,6 +180,12 @@ onMounted(async () => {
   setTimeout(() => {
     tinymce.get("editor_de").setContent(blogData.value["description:de"]);
     tinymce.get("editor_en").setContent(blogData.value["description:en"]);
+    tinymce
+      .get("short_description_editor_de")
+      .setContent(blogData.value["short_description:de"]);
+    tinymce
+      .get("short_description_editor_en")
+      .setContent(blogData.value["short_description:en"]);
   }, 100);
 });
 
@@ -184,6 +205,17 @@ onBeforeUnmount(() => {
       <LanguageContainer lang="de" title="Titel (DE)">
         <template #content>
           <input type="text" v-model="blogData['name:de']" placeholder="Name" />
+        </template>
+      </LanguageContainer>
+    </div>
+    <div class="row content-row">
+      <LanguageContainer lang="de" title="Kurzbeschreibung">
+        <template #content>
+          <textarea
+            for="short_description"
+            placeholder="Beschreibung"
+            id="short_description_editor_de"
+          ></textarea>
         </template>
       </LanguageContainer>
     </div>
@@ -223,6 +255,17 @@ onBeforeUnmount(() => {
       <LanguageContainer lang="en" title="Titel (EN)">
         <template #content>
           <input type="text" v-model="blogData['name:en']" placeholder="Name" />
+        </template>
+      </LanguageContainer>
+    </div>
+    <div class="row content-row">
+      <LanguageContainer lang="en" title="Short Description">
+        <template #content>
+          <textarea
+            for="short_description"
+            placeholder="Beschreibung"
+            id="short_description_editor_en"
+          ></textarea>
         </template>
       </LanguageContainer>
     </div>

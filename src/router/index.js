@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import TourOverview from "../views/Touren/Overview.vue";
 import TourCreate from "../views/Touren/Create.vue";
 import TourEdit from "../views/Touren/Edit.vue";
@@ -6,6 +7,7 @@ import TourEdit from "../views/Touren/Edit.vue";
 import GuideOverview from "../views/Guides/Overview.vue";
 import GuideCreate from "../views/Guides/Create.vue";
 import GuideEdit from "../views/Guides/Edit.vue";
+import Profile from "../views/Guides/Profile.vue";
 
 import SprachenOverview from "../views/Sprachen/Overview.vue";
 import SprachenCreate from "../views/Sprachen/Create.vue";
@@ -82,6 +84,11 @@ const router = createRouter({
       path: "/guide-bearbeiten/:id",
       name: "guide-bearbeiten",
       component: GuideEdit,
+    },
+    {
+      path: "/profile/:id",
+      name: "profile",
+      component: Profile,
     },
     {
       path: "/sprachen",

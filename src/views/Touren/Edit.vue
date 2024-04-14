@@ -344,6 +344,8 @@ const updateTour = () => {
   if (tourData.value.is_public) {
     tourData.value.price = computedPrice.value;
     tourData.value.duration = computedDuration.value;
+  } else {
+    tourData.value.date = null;
   }
 
   axios

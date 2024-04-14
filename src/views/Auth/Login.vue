@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 
 const email = ref("");
@@ -33,14 +33,30 @@ const login = () => {
     .then((res) => {
       dataloading.value = false;
       sessionStorage.setItem("token", res.data.token);
-      window.location.href = "/";
+      if(res.data.role && res.data.role === "guide") {
+        sessionStorage.setItem("role", "guide");
+        sessionStorage.setItem("guideId", res.data.guide_id);
+        window.location.href = "/profile/" + res.data.guide_id;
+      } else {
+        window.location.href = "/";
+      }
     })
     .catch((err) => {
       dataloading.value = false;
       console.log(err);
-      window.alert("Sie konnten nicht angemeldet werden. Überprüfen Sie Ihre Eingaben.")
+      window.alert(
+        err.response.data.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+      );
     });
 };
+
+onMounted(() => {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      login();
+    }
+  });
+});
 </script>
 
 <style>
@@ -50,17 +66,20 @@ const login = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #efefef;
 }
 
 .login-container {
   width: 400px;
   height: auto;
-  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  background-color: #ffffff;
+  box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
 .login-content {
-  padding: 20px;
+  padding: 30px;
 }
 
 .login-content img {

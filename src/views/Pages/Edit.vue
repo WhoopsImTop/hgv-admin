@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import LanguageContainer from "../../components/LanguageContainer.vue";
 
@@ -34,6 +34,7 @@ const pageData = ref({
 const buttonText = ref("Erstellen");
 
 const route = useRoute();
+const router = useRouter();
 
 const validatePageData = () => {
   if (pageData.value["name:de"] === "") {

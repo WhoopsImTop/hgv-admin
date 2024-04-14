@@ -30,7 +30,10 @@ const translateKeyValue = (keyValue) => {
     return keyValue ? "Ja" : "Nein";
   } else if (typeof keyValue === "number") {
     return keyValue === 0 ? "Nein" : "Ja";
-  } else if (new Date(keyValue).getTime() > 0) {
+  } else if (
+    (keyValue === "created_at" || keyValue === "updated_at") &&
+    new Date(keyValue).getTime() > 0
+  ) {
     const date = new Date(keyValue).toLocaleString("de-DE");
     return date;
   } else if (keyValue === "draft") {
@@ -66,7 +69,9 @@ const translateKeyValue = (keyValue) => {
       </tbody>
       <tbody v-else-if="loading">
         <tr>
-          <td :colspan="tableColumns.length + 1"><span class="loader"></span>Lade Daten...</td>
+          <td :colspan="tableColumns.length + 1">
+            <span class="loader"></span>Lade Daten...
+          </td>
         </tr>
       </tbody>
       <tbody v-else>

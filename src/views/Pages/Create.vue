@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
 
 import LanguageContainer from "../../components/LanguageContainer.vue";
 
@@ -29,6 +30,8 @@ const pageData = ref({
   status: "entwurf",
   slug: "",
 });
+
+const router = useRouter();
 
 const buttonText = ref("Erstellen");
 

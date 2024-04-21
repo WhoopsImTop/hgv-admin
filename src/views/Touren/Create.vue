@@ -35,10 +35,10 @@ const tourData = ref({
   "name:en": "",
   "description:de": "",
   "description:en": "",
-  location: {
+  /* location: {
     lat: 0,
     lng: 0,
-  },
+  }, */
   status: "draft",
   is_public: false,
   date: null,
@@ -73,13 +73,6 @@ const router = useRouter();
 const computedPrice = computed(() => {
   const price = tourData.value.price.replace(",", ".").replace(/[^0-9.]/g, "");
   return price;
-});
-
-const computedDuration = computed(() => {
-  const duration = tourData.value.duration
-    .replace(",", ".")
-    .replace(/[^0-9.]/g, "");
-  return duration;
 });
 
 const fileSizeError = ref("");
@@ -167,12 +160,6 @@ const removeImage = (id) => {
 
 const validateTourData = () => {
   errors.value = [];
-  if (tourData.value["name:de"] === "") {
-    errors.value.push("Titel der Tour (DE) ist ein Pflichtfeld");
-  }
-  if (tourData.value["name:en"] === "") {
-    errors.value.push("Titel der Tour (EN) ist ein Pflichtfeld");
-  }
   if (images.value.length === 0) {
     errors.value.push("Es muss mindestens ein Bild hochgeladen werden");
   }
@@ -196,9 +183,9 @@ const saveTour = () => {
   }
 
   //getData on map
-  const mapData = mapContainer.value.getData();
+  /* const mapData = mapContainer.value.getData();
   tourData.value.location.lat = mapData.lat;
-  tourData.value.location.lng = mapData.lng;
+  tourData.value.location.lng = mapData.lng; */
 
   //get content of tinymce editors
   tourData.value["description:de"] = tinymce.get("editor_de").getContent();
@@ -226,7 +213,7 @@ const saveTour = () => {
 
   if (tourData.value.is_public) {
     tourData.value.price = computedPrice.value;
-    tourData.value.duration = computedDuration.value;
+    tourData.value.duration = tourData.value.duration || "";
   }
 
   axios
@@ -340,11 +327,11 @@ onBeforeMount(() => {
             </template>
           </language-container>
         </div>
-        <div class="content-row">
+        <!-- <div class="content-row">
           <h4>Standort</h4>
           <hr class="divider" />
           <MapComponent ref="mapContainer" />
-        </div>
+        </div> -->
         <div class="content-row">
           <h4>Bilder</h4>
           <hr class="divider" />

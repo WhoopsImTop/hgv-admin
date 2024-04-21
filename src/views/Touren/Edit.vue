@@ -33,10 +33,10 @@ const tourData = ref({
   "name:en": "",
   "description:de": "",
   "description:en": "",
-  location: {
+  /* location: {
     lat: 0,
     lng: 0,
-  },
+  }, */
   status: "draft",
   is_public: false,
   date: new Date(),
@@ -82,16 +82,6 @@ const computedPrice = computed(() => {
   return price;
 });
 
-const computedDuration = computed(() => {
-  if (typeof tourData.value.duration === "number") {
-    return tourData.value.duration;
-  }
-  const duration = tourData.value.duration
-    .replace(",", ".")
-    .replace(/[^0-9.]/g, "");
-  return duration;
-});
-
 const fetchTourData = () => {
   axios
     .get("/tours/" + id, {
@@ -109,7 +99,7 @@ const fetchTourData = () => {
           res.data.tour.translations[0].description;
         tourData.value["description:en"] =
           res.data.tour.translations[1].description;
-        let locationData = res.data.tour.location;
+        /* let locationData = res.data.tour.location;
         if (locationData) {
           locationData = JSON.parse(locationData);
           tourData.value.location.lat = locationData.lat;
@@ -117,7 +107,7 @@ const fetchTourData = () => {
         } else {
           tourData.value.location.lat = 0;
           tourData.value.location.lng = 0;
-        }
+        } */
         tourData.value.status = res.data.tour.status;
         tourData.value.is_public = res.data.tour.is_public;
         tourData.value.duration = res.data.tour.duration;
@@ -285,12 +275,6 @@ const removeImage = (id) => {
 
 const validateTourData = () => {
   errors.value = [];
-  if (tourData.value["name:de"] === "") {
-    errors.value.push("Titel der Tour (DE) ist ein Pflichtfeld");
-  }
-  if (tourData.value["name:en"] === "") {
-    errors.value.push("Titel der Tour (EN) ist ein Pflichtfeld");
-  }
   if (images.value.length === 0) {
     errors.value.push("Es muss mindestens ein Bild hochgeladen werden");
   }
@@ -314,10 +298,10 @@ const updateTour = () => {
   }
 
   //getData on map
-  const mapData = mapContainer.value.getData();
+  /* const mapData = mapContainer.value.getData();
   tourData.value.location = tourData.value.location;
   tourData.value.location.lat = mapData.lat;
-  tourData.value.location.lng = mapData.lng;
+  tourData.value.location.lng = mapData.lng; */
   buttonText.value = "Tour wird aktualisiert...";
   makeImageArraySaveable();
   //get content of tinymce editors
@@ -343,11 +327,10 @@ const updateTour = () => {
 
   if (tourData.value.is_public) {
     tourData.value.price = computedPrice.value;
-    tourData.value.duration = computedDuration.value;
-  } else {
-    tourData.value.date = null;
+    tourData.value.duration = tourData.value.duration || "";
   }
-
+  tourData.value.date = null;
+  
   axios
     .patch("/tours/" + id, tourData.value, {
       headers: {
@@ -438,7 +421,7 @@ onBeforeMount(() => {
             </template>
           </language-container>
         </div>
-        <div class="content-row">
+        <!-- <div class="content-row">
           <h4>Standort</h4>
           <hr class="divider" />
           <MapComponent
@@ -446,7 +429,7 @@ onBeforeMount(() => {
             v-if="!loading"
             :coordinates="tourData.location"
           />
-        </div>
+        </div> -->
         <div class="content-row">
           <h4>Bilder</h4>
           <hr class="divider" />

@@ -6,6 +6,9 @@
         <label for="date">{{
           new Date(date.date).toLocaleDateString("de-DE")
         }}</label>
+        <label for="guide">{{
+          date.guide ? date.guide.name : "Kein Guide zugewiesen"
+        }}</label>
         <div class="date-picker-actions">
           <div @click="EditDateEntry(date)">
             <img src="/src/assets/icons/edit.svg" width="20" height="20" />
@@ -23,6 +26,15 @@
     </div>
     <div v-if="addDate" class="date-picker-add">
       <input type="date" v-model="date" />
+      <select v-model="guide">
+        <option
+          v-for="guide in guidesToSelect"
+          :key="guide.id"
+          :value="guide.id"
+        >
+          {{ guide.name }}
+        </option>
+      </select>
       <button class="button-primary" @click="addDateEntry()">Speichern</button>
       <button
         class="button-primary"
@@ -59,6 +71,8 @@ export default {
       addDate: false,
       isEditing: false,
       editingId: null,
+      guides: [],
+      guidesToSelect: [],
       tourId: parseInt(this.$route.params.id),
     };
   },
@@ -68,7 +82,7 @@ export default {
         axios
           .put(
             `/tour_dates/${this.editingId}`,
-            { date: this.date },
+            { date: this.date, guide_id: this.guide },
             {
               headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -100,7 +114,7 @@ export default {
         axios
           .post(
             "/tour_dates",
-            { date: this.date, tour_id: this.tourId },
+            { date: this.date, tour_id: this.tourId, guide_id: this.guide },
             {
               headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -111,8 +125,10 @@ export default {
             this.dates.push({
               id: response.data.id,
               date: response.data.date,
+              guide: this.guidesToSelect.find((g) => g.id === this.guide),
             });
             this.date = "";
+            this.guide = "";
             this.addDate = false;
           })
           .catch((error) => {
@@ -159,7 +175,22 @@ export default {
     axios
       .get(`/tour_dates/${this.tourId}`)
       .then((response) => {
-        this.dates = response.data.tour_dates;
+        this.dates = response.data.tour_dates.tourDates || [];
+        this.guides = response.data.guides || [];
+        console.log(this.dates);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          //remove token and redirect to login
+          window.alert("Sitzung abgelaufen. Bitte melden Sie sich erneut an.");
+          sessionStorage.removeItem("token");
+          window.location.reload();
+        }
+      });
+    axios
+      .get("/guides?preview=true&per_page=300&fields=id")
+      .then((response) => {
+        this.guidesToSelect = response.data.guides.data;
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -195,9 +226,8 @@ export default {
 }
 
 .date-picker-add {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   padding: 10px 0;
   gap: 16px;
 }

@@ -99,7 +99,7 @@ const setNewGuide = (guide) => {
 };
 
 const getGuides = async () => {
-  const response = await axios.get("/guides?preview=true&per_page=300");
+  const response = await axios.get("/guides?preview=true&per_page=300&fields=id");
   return response.data.guides.data;
 };
 

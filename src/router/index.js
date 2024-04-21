@@ -45,6 +45,8 @@ import BlogOverview from "../views/Blog/Overview.vue";
 import BlogCreate from "../views/Blog/Create.vue";
 import BlogEdit from "../views/Blog/Edit.vue";
 
+import Startseite from "../views/Startseite/Create.vue";
+
 import GettingStarted from "../views/GettingStarted.vue";
 
 const router = createRouter({
@@ -224,6 +226,11 @@ const router = createRouter({
       path: "/blog-bearbeiten/:id",
       name: "blog-bearbeiten",
       component: BlogEdit,
+    },
+    {
+      path: "/startseite",
+      name: "startseite",
+      component: Startseite,
     },
   ],
   scrollBehavior(to, from, savedPosition) {

@@ -36,8 +36,7 @@ onBeforeMount(() => {
         alt="Vue logo"
         class="logo"
         src="@/assets/logo.svg"
-        width="40"
-        height="40"
+        width="60"
       />
     </div>
   </header>
@@ -83,7 +82,7 @@ onBeforeMount(() => {
         </RouterLink>
         <RouterLink to="/blog" class="navigation-link">
           <img src="@/assets/icons/page.svg" width="25" height="25" />
-          Blog
+          Aktuelles
         </RouterLink>
         <RouterLink to="/startseite" class="navigation-link">
           <img src="@/assets/icons/page.svg" width="25" height="25" />

@@ -1,4 +1,6 @@
 <script setup>
+import imageCompression from "browser-image-compression";
+
 import LanguageContainer from "../../components/LanguageContainer.vue";
 import toggleSwitch from "../../components/customInputs/toggleSwitch.vue";
 import GuideSelect from "../../components/customInputs/GuideSelect.vue";

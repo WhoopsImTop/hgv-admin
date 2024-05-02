@@ -43,6 +43,7 @@
         Abbrechen
       </button>
     </div>
+    <span class="error" v-if="error">{{ error }}</span>
     <button class="button-primary" @click="addDate = true" :disabled="addDate">
       Termin hinzufügen
     </button>
@@ -73,11 +74,28 @@ export default {
       editingId: null,
       guides: [],
       guidesToSelect: [],
+      error: "",
       tourId: parseInt(this.$route.params.id),
     };
   },
   methods: {
     addDateEntry() {
+      this.error = "";
+      if (!this.date || this.date === "") {
+        //check the date value
+        if (new Date(this.date) === "Invalid Date") {
+          this.error = "Bitte geben Sie ein gültiges Datum ein.";
+          return;
+        } else {
+          this.error = "Bitte geben Sie ein Datum ein.";
+          return;
+        }
+      }
+      if (!this.guide || this.guide === "") {
+        this.error = "Bitte wählen Sie einen Guide aus.";
+        return;
+      }
+
       if (this.isEditing) {
         axios
           .put(
@@ -108,6 +126,8 @@ export default {
               );
               sessionStorage.removeItem("token");
               window.location.reload();
+            } else {
+              this.error = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
             }
           });
       } else {
@@ -139,6 +159,8 @@ export default {
               );
               sessionStorage.removeItem("token");
               window.location.reload();
+            } else {
+              this.error = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
             }
           });
       }

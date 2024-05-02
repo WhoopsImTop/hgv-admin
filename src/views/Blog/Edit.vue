@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
 <template>
   <main>
     <div class="row">
-      <h1>Blogbeitrag erstellen</h1>
+      <h1>Beitrag bearbeiten</h1>
       <router-Link to="/blog" class="button-primary">Abbrechen</router-Link>
     </div>
     <hr class="divider" />

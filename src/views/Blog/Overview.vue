@@ -62,9 +62,9 @@ onMounted(() => {
 <template>
   <main>
     <div class="row">
-      <h1>Alle Blogbeitragn</h1>
+      <h1>Alle Beiträge</h1>
       <router-link to="/blog-erstellen" class="button-primary"
-        >Blogbeitrag hinzufügen</router-link
+        >Beitrag hinzufügen</router-link
       >
     </div>
     <hr class="divider" />

@@ -9,7 +9,7 @@ import router from "./router";
 //set axios as global
 import axios from "axios";
 
-axios.defaults.baseURL = "http://127.0.0.1:8000/api";
+axios.defaults.baseURL = "https://api.hamburger-gaestefuehrer.de/api";
 
 //add access-control-allow-origin header
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";

@@ -32,7 +32,7 @@ const skillData = ref({
 const errors = ref([]);
 
 const buttonText = ref(
-  props.editMode ? "Skill aktualisieren" : "Skill erstellen"
+  props.editMode ? "Thema aktualisieren" : "Thema erstellen"
 );
 const imagePreview = ref(null);
 
@@ -55,8 +55,8 @@ const createSkill = () => {
   }
 
   buttonText.value = props.editMode
-    ? "Skill aktualisieren..."
-    : "Skill erstellen...";
+    ? "Thema aktualisieren..."
+    : "Thema erstellen...";
 
   axios
     .post("/skills", skillData.value, {
@@ -77,12 +77,12 @@ const createSkill = () => {
     .catch((err) => {
       console.log(err);
       buttonText.value = props.editMode
-        ? "Skill aktualisieren"
-        : "Skill erstellen";
+        ? "Thema aktualisieren"
+        : "Thema erstellen";
       if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
-        window.alert("Fehler beim Erstellen der Skill");
+        window.alert("Fehler beim Erstellen des Themas");
       }
     });
 };
@@ -115,8 +115,8 @@ const updateSkill = () => {
     })
     .then((res) => {
       buttonText.value = props.editMode
-        ? "Skill aktualisieren"
-        : "Skill erstellen";
+        ? "Thema aktualisieren"
+        : "Thema erstellen";
       //push to guide overview
       router.push("/skills");
     })
@@ -215,12 +215,12 @@ onBeforeMount(() => {
   </div>
   <hr class="divider" />
   <div class="row content-row">
-    <LanguageContainer lang="de" title="Skill (DE)">
+    <LanguageContainer lang="de" title="Thema (DE)">
       <template #content>
         <input type="text" v-model="skillData['name:de']" placeholder="Name" />
       </template>
     </LanguageContainer>
-    <LanguageContainer lang="en" title="Skill (EN)">
+    <LanguageContainer lang="en" title="Thema (EN)">
       <template #content>
         <input type="text" v-model="skillData['name:en']" placeholder="Name" />
       </template>

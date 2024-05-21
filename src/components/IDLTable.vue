@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
+import toggleSwitch from "./customInputs/toggleSwitch.vue";
+
 const props = defineProps({
   tableData: {
     type: Array,
@@ -16,12 +18,20 @@ const props = defineProps({
 });
 
 const search = ref("");
+const showOnlyPublic = ref(false);
 
 const filteredTableData = computed(() => {
   return props.tableData.filter((row) => {
-    return Object.values(row).some((value) => {
-      return String(value).toLowerCase().includes(search.value.toLowerCase());
+    const searchMatch = Object.values(row).some((value) => {
+      if (typeof value === "string") {
+        return value.toLowerCase().includes(search.value.toLowerCase());
+      }
+      return false;
     });
+    if (showOnlyPublic.value) {
+      return searchMatch && row.is_public;
+    }
+    return searchMatch;
   });
 });
 
@@ -30,10 +40,8 @@ const translateKeyValue = (keyValue) => {
     return keyValue ? "Ja" : "Nein";
   } else if (typeof keyValue === "number") {
     return keyValue === 0 ? "Nein" : "Ja";
-  } else if (
-    (keyValue === "created_at" || keyValue === "updated_at") &&
-    new Date(keyValue).getTime() > 0
-  ) {
+  } else if (new Date(keyValue).getTime() > 0) {
+    console.log(keyValue);
     const date = new Date(keyValue).toLocaleString("de-DE");
     return date;
   } else if (keyValue === "draft") {
@@ -43,6 +51,10 @@ const translateKeyValue = (keyValue) => {
   }
   return keyValue;
 };
+
+const hasPublicTours = computed(() => {
+  return props.tableData.some((tour) => tour.is_public);
+});
 </script>
 
 <template>
@@ -50,6 +62,15 @@ const translateKeyValue = (keyValue) => {
     <div class="input-container">
       <input type="search" v-model="search" placeholder="Suche" />
     </div>
+
+    <div v-if="hasPublicTours" style="margin: 10px 0 20px">
+      <toggle-switch
+        :value="showOnlyPublic"
+        titel="Zeige nur öffentliche Touren"
+        @input="showOnlyPublic = $event"
+      />
+    </div>
+
     <table>
       <thead>
         <tr>

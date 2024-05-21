@@ -162,8 +162,7 @@ const changePassword = () => {
         window.location.reload();
       } else {
         window.alert(
-          "Fehler beim Ändern des Passworts. " + 
-          err.response.data.error
+          "Fehler beim Ändern des Passworts. " + err.response.data.error
         );
         window.location.reload();
       }
@@ -240,6 +239,10 @@ const updateGuide = () => {
     );
   }
 
+  if (guideData.value.contact.email != "") {
+    guideData.value.email = guideData.value.contact.email;
+  }
+
   //if guideData.image is object get id key
   if (
     typeof guideData.value.image === "object" &&
@@ -262,7 +265,7 @@ const updateGuide = () => {
   guideData.value.skills = skills;
 
   axios
-    .patch(`/guides/${props.id}`, guideData.value, {
+    .patch(`/guides/${route.params.id}`, guideData.value, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
@@ -270,6 +273,7 @@ const updateGuide = () => {
     .then((res) => {
       buttonText.value = "Profil aktualisieren";
       window.alert("Profil erfolgreich aktualisiert");
+      window.location.reload();
     })
     .catch((err) => {
       console.log(err);
@@ -283,6 +287,7 @@ const updateGuide = () => {
       } else {
         window.alert("Fehler beim Aktualisieren des Guides");
       }
+      window.location.reload();
     });
 };
 
@@ -486,7 +491,7 @@ onBeforeMount(() => {
           />
         </div>
         <div class="col" style="width: 23%; min-width: 200px">
-          <span>Skillauswahl</span>
+          <span>Themenauswahl</span>
           <SkillSelect ref="skillSelect" :selected-skills="guideData.skills" />
         </div>
       </div>
@@ -545,10 +550,7 @@ onBeforeMount(() => {
       </div>
     </div>
     <div class="content-row">
-      <button
-        class="button-primary"
-        @click="props.editMode ? updateGuide() : createGuide()"
-      >
+      <button class="button-primary" @click="updateGuide()">
         {{ buttonText }}
       </button>
       <div class="errorMessages">
@@ -562,11 +564,19 @@ onBeforeMount(() => {
       <div class="row">
         <div class="col">
           <span>Neues Passwort</span>
-          <input type="password" placeholder="Neues Passwort" v-model="passwordData.newPassword" />
+          <input
+            type="password"
+            placeholder="Neues Passwort"
+            v-model="passwordData.newPassword"
+          />
         </div>
         <div class="col">
           <span>Neues Passwort wiederholen</span>
-          <input type="password" placeholder="Neues Passwort wiederholen" v-model="passwordData.newPasswordRepeat" />
+          <input
+            type="password"
+            placeholder="Neues Passwort wiederholen"
+            v-model="passwordData.newPasswordRepeat"
+          />
         </div>
       </div>
       <button

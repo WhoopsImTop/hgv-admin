@@ -183,6 +183,10 @@ const updateGuide = () => {
       }
     );
   }
+  
+  if (guideData.value.contact.email != "") {
+    guideData.value.email = guideData.value.contact.email;
+  }
 
   //if guideData.image is object get id key
   if (
@@ -431,7 +435,7 @@ onBeforeMount(() => {
         />
       </div>
       <div class="col" style="width: 23%; min-width: 200px">
-        <span>Skillauswahl</span>
+        <span>Themenauswahl</span>
         <SkillSelect ref="skillSelect" :selected-skills="guideData.skills" />
       </div>
     </div>

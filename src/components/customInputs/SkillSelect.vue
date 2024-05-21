@@ -32,7 +32,7 @@
           v-if="showSearchResults || selectedSkills.length === 0"
           type="search"
           v-model="search"
-          placeholder="Name des Skills"
+          placeholder="Name des Themas..."
         />
         <!-- <div class="search-chip" v-if="!showSearchResults && selectedSkills.length > 0" @click="showSearchResults = true">
         <div class="chip-remove">
@@ -66,7 +66,7 @@
     </div>
     <div v-else class="loadingIndicator">
       <div class="combobox">
-        <span>Lade Skills...</span>
+        <span>Lade Themen...</span>
       </div>
     </div>
   </div>

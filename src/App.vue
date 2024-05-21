@@ -1,10 +1,12 @@
 <script setup>
 import { watch, ref, onBeforeMount } from "vue";
-import { RouterLink, RouterView, useRoute } from "vue-router";
+import { RouterLink, RouterView, useRouter } from "vue-router";
 import Login from "./views/Auth/Login.vue";
 
 const authState = ref(false);
 const isGuide = ref(false);
+
+const router = useRouter();
 
 const checkAuthState = () => {
   const token = sessionStorage.getItem("token");
@@ -17,6 +19,14 @@ const checkAuthState = () => {
     }
     authState.value = true;
   }
+};
+
+const logout = () => {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("role");
+  window.onbeforeunload = null;
+  router.push("/");
+  authState.value = false;
 };
 
 setInterval(() => {
@@ -32,12 +42,11 @@ onBeforeMount(() => {
   <Login v-if="!authState" />
   <header v-if="authState">
     <div class="header-content">
-      <img
-        alt="Vue logo"
-        class="logo"
-        src="@/assets/logo.svg"
-        width="60"
-      />
+      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="60" />
+
+      <button 
+      v-if="authState"
+      class="button-primary" @click="logout">Abmelden</button>
     </div>
   </header>
 
@@ -94,7 +103,7 @@ onBeforeMount(() => {
         </RouterLink>
       </div>
     </div>
-    <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState"/>
+    <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState" />
   </div>
 </template>
 
@@ -145,7 +154,7 @@ header {
   text-decoration: none;
   color: var(--primary-color);
   letter-spacing: 1px;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 .align-bottom {

@@ -54,8 +54,8 @@
     </div>
   </main>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { RouterLink, useRouter } from "vue-router";
@@ -84,7 +84,11 @@ const updateUser = () => {
     return;
   }
   axios
-    .patch("/users/" + id, userData.value)
+    .patch("/users/" + id, userData.value, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
     .then(() => {
       router.push("/verwaltung");
     })
@@ -95,7 +99,11 @@ const updateUser = () => {
 
 const loadUser = () => {
   axios
-    .get(`/users/${id}`)
+    .get(`/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       userData.value = res.data.user;
     })
@@ -108,6 +116,5 @@ onMounted(() => {
   loadUser();
 });
 </script>
-  
-  <style>
-</style>
+
+<style></style>

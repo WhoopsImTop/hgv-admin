@@ -20,7 +20,11 @@ const tableColumns = ref([
 const fetchAllUsers = () => {
   dataLoading.value = true;
   axios
-    .get("/users")
+    .get("/users", {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       dataLoading.value = false;
       tableData.value = res.data.users;
@@ -44,10 +48,12 @@ const deleteUser = (id) => {
     })
     .catch((err) => {
       console.log(err);
-      if(err.response.status === 401) {
+      if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       }
-      window.alert("Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut.");
+      window.alert(
+        "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
+      );
     });
 };
 
@@ -65,7 +71,11 @@ onMounted(() => {
       >
     </div>
     <hr class="divider" />
-    <IDLTable :tableData="tableData" :tableColumns="tableColumns" :loading="dataLoading">
+    <IDLTable
+      :tableData="tableData"
+      :tableColumns="tableColumns"
+      :loading="dataLoading"
+    >
       <template #actions> Aktionen </template>
       <template #tableActions="slotProps">
         <RouterLink :to="`/verwaltung-bearbeiten/${slotProps.row.id}`">

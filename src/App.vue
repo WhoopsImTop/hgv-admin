@@ -6,6 +6,7 @@ import Login from "./views/Auth/Login.vue";
 const authState = ref(false);
 const isGuide = ref(false);
 const role = sessionStorage.getItem("role");
+const guideId = sessionStorage.getItem("guideId") || null;
 
 const checkAuthState = () => {
   const token = sessionStorage.getItem("token");
@@ -89,6 +90,10 @@ onBeforeMount(() => {
         <RouterLink to="/touren" class="navigation-link">
           <img src="@/assets/icons/tour.svg" width="25" height="25" />
           Touren
+        </RouterLink>
+        <RouterLink v-if="guideId != null" :to="'/profile/' + guideId" class="navigation-link">
+          <img src="@/assets/icons/usermanagement.svg" width="25" height="25" />
+          Dein Profil
         </RouterLink>
       </div>
     </div>

@@ -34,7 +34,7 @@ const login = () => {
       dataloading.value = false;
       sessionStorage.setItem("token", res.data.token);
       sessionStorage.setItem("role", res.data.role);
-      if (res.data.role && res.data.role === "guide") {
+      if (res.data.role && res.data.role === "guide" || res.data.role === "moderator") {
         sessionStorage.setItem("guideId", res.data.guide);
         window.location.href = "/profile/" + res.data.guide;
       } else {

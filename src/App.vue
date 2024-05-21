@@ -5,16 +5,13 @@ import Login from "./views/Auth/Login.vue";
 
 const authState = ref(false);
 const isGuide = ref(false);
+const role = sessionStorage.getItem("role");
 
 const checkAuthState = () => {
   const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
   if (!token) {
     authState.value = false;
   } else {
-    if (role === "guide") {
-      isGuide.value = true;
-    }
     authState.value = true;
   }
 };
@@ -32,18 +29,13 @@ onBeforeMount(() => {
   <Login v-if="!authState" />
   <header v-if="authState">
     <div class="header-content">
-      <img
-        alt="Vue logo"
-        class="logo"
-        src="@/assets/logo.svg"
-        width="60"
-      />
+      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="60" />
     </div>
   </header>
 
   <div class="content-container" v-if="authState">
-    <div class="sidebar" v-if="!isGuide">
-      <div class="wrapper">
+    <div class="sidebar" v-if="role != 'guide'">
+      <div class="wrapper" v-if="role === 'admin'">
         <RouterLink to="/touren" class="navigation-link">
           <img src="@/assets/icons/tour.svg" width="25" height="25" />
           Touren
@@ -93,8 +85,14 @@ onBeforeMount(() => {
           Benutzerverwaltung
         </RouterLink>
       </div>
+      <div class="wrapper" v-if="role === 'moderator'">
+        <RouterLink to="/touren" class="navigation-link">
+          <img src="@/assets/icons/tour.svg" width="25" height="25" />
+          Touren
+        </RouterLink>
+      </div>
     </div>
-    <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState"/>
+    <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState" />
   </div>
 </template>
 
@@ -145,7 +143,7 @@ header {
   text-decoration: none;
   color: var(--primary-color);
   letter-spacing: 1px;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 .align-bottom {

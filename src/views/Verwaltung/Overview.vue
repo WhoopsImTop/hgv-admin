@@ -20,7 +20,11 @@ const tableColumns = ref([
 const fetchAllUsers = () => {
   dataLoading.value = true;
   axios
-    .get("/users")
+    .get("/users", {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
     .then((res) => {
       dataLoading.value = false;
       tableData.value = res.data.users;

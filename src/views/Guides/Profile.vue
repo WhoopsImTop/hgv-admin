@@ -262,7 +262,7 @@ const updateGuide = () => {
   guideData.value.skills = skills;
 
   axios
-    .patch(`/guides/${props.id}`, guideData.value, {
+    .patch(`/guides/${route.params.id}`, guideData.value, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
@@ -270,6 +270,7 @@ const updateGuide = () => {
     .then((res) => {
       buttonText.value = "Profil aktualisieren";
       window.alert("Profil erfolgreich aktualisiert");
+      window.location.reload();
     })
     .catch((err) => {
       console.log(err);
@@ -486,7 +487,7 @@ onBeforeMount(() => {
           />
         </div>
         <div class="col" style="width: 23%; min-width: 200px">
-          <span>Skillauswahl</span>
+          <span>Themenauswahl</span>
           <SkillSelect ref="skillSelect" :selected-skills="guideData.skills" />
         </div>
       </div>
@@ -547,7 +548,7 @@ onBeforeMount(() => {
     <div class="content-row">
       <button
         class="button-primary"
-        @click="props.editMode ? updateGuide() : createGuide()"
+        @click="updateGuide()"
       >
         {{ buttonText }}
       </button>

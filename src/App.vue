@@ -1,25 +1,27 @@
 <script setup>
-import { watch, ref, onBeforeMount } from "vue";
+import { watch, ref, onBeforeMount, computed } from "vue";
 import { RouterLink, RouterView, useRouter } from "vue-router";
 import Login from "./views/Auth/Login.vue";
 
 const authState = ref(false);
 const isGuide = ref(false);
+const role = sessionStorage.getItem("role");
+const guideId = sessionStorage.getItem("guideId") || null;
 
 const router = useRouter();
 
 const checkAuthState = () => {
   const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
   if (!token) {
     authState.value = false;
   } else {
-    if (role === "guide") {
-      isGuide.value = true;
-    }
     authState.value = true;
   }
 };
+
+const showProfile = computed(() => {
+  return parseInt(guideId) > 0;
+});
 
 const logout = () => {
   sessionStorage.removeItem("token");
@@ -44,15 +46,15 @@ onBeforeMount(() => {
     <div class="header-content">
       <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="60" />
 
-      <button 
-      v-if="authState"
-      class="button-primary" @click="logout">Abmelden</button>
+      <button v-if="authState" class="button-primary" @click="logout">
+        Abmelden
+      </button>
     </div>
   </header>
 
   <div class="content-container" v-if="authState">
-    <div class="sidebar" v-if="!isGuide">
-      <div class="wrapper">
+    <div class="sidebar" v-if="role != 'guide'">
+      <div class="wrapper" v-if="role === 'admin'">
         <RouterLink to="/touren" class="navigation-link">
           <img src="@/assets/icons/tour.svg" width="25" height="25" />
           Touren
@@ -101,6 +103,22 @@ onBeforeMount(() => {
           <img src="@/assets/icons/usermanagement.svg" width="25" height="25" />
           Benutzerverwaltung
         </RouterLink>
+      </div>
+      <div class="wrapper" v-if="role === 'moderator'">
+        <RouterLink to="/touren" class="navigation-link">
+          <img src="@/assets/icons/tour.svg" width="25" height="25" />
+          Touren
+        </RouterLink>
+        <div v-if="showProfile">
+          <RouterLink :to="'/profile/' + guideId" class="navigation-link">
+            <img
+              src="@/assets/icons/usermanagement.svg"
+              width="25"
+              height="25"
+            />
+            Dein Profil
+          </RouterLink>
+        </div>
       </div>
     </div>
     <RouterView :class="isGuide ? 'guideContent' : 'view'" v-if="authState" />

@@ -7,8 +7,8 @@
       >
     </div>
     <hr class="divider" />
-    <div class="row content-row">
-      <div class="col" style="width: 48%; min-width: 200px">
+    <div class="row content-row" style="display: grid; grid-gap: 16px; grid-template-columns: 1fr 1fr 1fr;">
+      <div class="col">
         <input
           type="name"
           placeholder="Benutzername"
@@ -17,7 +17,7 @@
           v-model="userData.name"
         />
       </div>
-      <div class="col" style="width: 48%; min-width: 200px">
+      <div class="col">
         <input
           type="email"
           placeholder="Email"
@@ -25,6 +25,13 @@
           name="email"
           v-model="userData.email"
         />
+      </div>
+      <div class="col">
+        <select v-model="userData.role">
+          <option value="admin">Admin</option>
+          <option value="guide">Guide</option>
+          <option value="moderator">Redakteur</option>
+        </select>
       </div>
     </div>
     <div class="row content-row">
@@ -49,7 +56,7 @@
     </div>
     <div class="row content-row">
       <button class="button-primary" @click="updateUser">
-        Benutzer erstellen
+        Benutzer bearbeiten
       </button>
     </div>
   </main>
@@ -99,7 +106,7 @@ const updateUser = () => {
 
 const loadUser = () => {
   axios
-    .get(`/users/${id}`, {
+    .get(`/users/${id}?preview=1`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },

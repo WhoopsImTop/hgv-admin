@@ -31,7 +31,13 @@ const fetchAllTours = () => {
     .get("/tours?preview=true&per_page=200&status=all")
     .then((res) => {
       dataLoading.value = false;
-      tableData.value = res.data.tours.data;
+      if (sessionStorage.getItem("role") === "moderator") {
+        tableData.value = res.data.tours.data.filter(
+          (tour) => tour.is_public == 1
+        );
+      } else {
+        tableData.value = res.data.tours.data;
+      }
     })
     .catch((err) => {
       dataLoading.value = false;

@@ -7,6 +7,7 @@ import CertificateSelect from "../../components/customInputs/CertificateSelect.v
 import SprachenSelect from "../../components/customInputs/SprachenSelect.vue";
 import SkillSelect from "../../components/customInputs/SkillSelect.vue";
 import MobilitaetSelect from "../../components/customInputs/MobilitaetSelect.vue";
+import TourSelect from "../../components/customInputs/TourSelect.vue";
 
 import axios from "axios";
 
@@ -52,6 +53,8 @@ const certificateSelect = ref(null);
 const languageSelect = ref(null);
 const mobilitySelect = ref(null);
 const skillSelect = ref(null);
+const tourSelect = ref(null);
+
 
 const guideData = ref({
   "name:de": "",
@@ -73,10 +76,18 @@ const passwordData = ref({
 });
 
 const changePassword = () => {
+  //validate that the new password is the same as the repeat and has at least 6 characters
   if (passwordData.value.newPassword !== passwordData.value.newPasswordRepeat) {
-    window.alert("Die neuen Passwörter stimmen nicht überein");
+    window.alert("Die Passwörter stimmen nicht überein");
     return;
   }
+
+  if (passwordData.value.newPassword.length < 6) {
+    window.alert("Das Passwort muss mindestens 6 Zeichen lang sein");
+    return;
+  }
+
+  
 
   if (guideData.tours !== null) {
     guideData.value.tours = guideData.value.tours.map((tour) => {
@@ -181,11 +192,15 @@ const validateGuideData = () => {
   const languages = languageSelect.value.getData();
   const mobility = mobilitySelect.value.getData();
   const skills = skillSelect.value.getData();
+  const tours = tourSelect.value.getData();
 
   guideData.value.certificates = certificates;
   guideData.value.languages = languages;
   guideData.value.mobility = mobility;
   guideData.value.skills = skills;
+  guideData.value.tours = tours;
+
+  console.log(guideData.value);
 
   errors.value = [];
   if (guideData.value["name:de"] === "") {
@@ -258,11 +273,13 @@ const updateGuide = () => {
   const languages = languageSelect.value.getData();
   const mobility = mobilitySelect.value.getData();
   const skills = skillSelect.value.getData();
+  const tours = tourSelect.value.getData();
 
   guideData.value.certificates = certificates;
   guideData.value.languages = languages;
   guideData.value.mobility = mobility;
   guideData.value.skills = skills;
+  guideData.value.tours = tours;
 
   axios
     .patch(`/guides/${route.params.id}`, guideData.value, {
@@ -493,6 +510,16 @@ onBeforeMount(() => {
         <div class="col" style="width: 23%; min-width: 200px">
           <span>Themenauswahl</span>
           <SkillSelect ref="skillSelect" :selected-skills="guideData.skills" />
+        </div>
+      </div>
+    </div>
+    <div class="content-row">
+      <h3>Touren des Guides</h3>
+      <hr class="divider" />
+      <div class="row">
+        <div class="col" style="width: 100%; min-width: 200px">
+          <span>Touren</span>
+          <TourSelect ref="tourSelect" :selected-tours="guideData.tours" />
         </div>
       </div>
     </div>

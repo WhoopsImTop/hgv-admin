@@ -138,7 +138,7 @@ const createGuide = () => {
       if (err.response.status === 401) {
         sessionStorage.removeItem("token");
       } else {
-        window.alert("Fehler beim Erstellen des Guides");
+        window.alert("Fehler beim Erstellen des Guides. Überprüfen Sie die Email ob diese schon existiert.");
       }
     });
 };

@@ -87,7 +87,7 @@ const createUser = () => {
       router.push("/verwaltung");
     })
     .catch((err) => {
-        window.alert("Benutzer konnte nicht erstellt werden");
+        window.alert("Benutzer konnte nicht erstellt werden. Überprüfe die Email ob diese schon existiert.");
     });
 };
 </script>

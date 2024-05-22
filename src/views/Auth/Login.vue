@@ -33,10 +33,10 @@ const login = () => {
     .then((res) => {
       dataloading.value = false;
       sessionStorage.setItem("token", res.data.token);
-      if(res.data.role && res.data.role === "guide") {
-        sessionStorage.setItem("role", "guide");
-        sessionStorage.setItem("guideId", res.data.guide_id);
-        window.location.href = "/profile/" + res.data.guide_id;
+      sessionStorage.setItem("role", res.data.role);
+      if (res.data.role && res.data.role === "guide" || res.data.role === "moderator") {
+        sessionStorage.setItem("guideId", res.data.guide);
+        window.location.href = "/profile/" + res.data.guide;
       } else {
         window.location.href = "/";
       }
@@ -45,7 +45,8 @@ const login = () => {
       dataloading.value = false;
       console.log(err);
       window.alert(
-        err.response.data.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+        err.response.data.message ||
+          "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
       );
     });
 };

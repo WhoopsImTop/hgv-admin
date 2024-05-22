@@ -37,6 +37,7 @@ const fetchAllUsers = () => {
 };
 
 const deleteUser = (id) => {
+  if(!window.confirm("Möchtest du den Benutzer wirklich löschen?")) return;
   axios
     .delete(`/users/${id}`, {
       headers: {
